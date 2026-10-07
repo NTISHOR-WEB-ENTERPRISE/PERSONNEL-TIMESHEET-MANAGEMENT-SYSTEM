@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        NTISHOR WEB ENTERPRISE | Personnel Timesheet Management System
+    </title>
+
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f4f7fc 0%,
+                    #eef3fb 50%,
+                    #f8faff 100%
+                );
+
+            color: #17233c;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        header {
+            width: 100%;
+
+            background: #ffffff;
+
+            border-bottom: 1px solid #e6ebf3;
+
+            box-shadow:
+                0 2px 12px rgba(0, 0, 0, 0.05);
+
+            position: relative;
+
+            z-index: 10;
+        }
+
+
+        .navbar {
+            max-width: 1250px;
+
+            margin: auto;
+
+            padding: 15px 30px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+        }
+
+
+        /* =====================================================
+           LOGO
+        ===================================================== */
+
+        .brand {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            text-decoration: none;
+
+            color: #173b87;
+        }
+
+
+        .brand img {
+            width: 52px;
+
+            height: 52px;
+
+            object-fit: contain;
+
+            border-radius: 10px;
+        }
+
+
+        .brand-text {
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        .brand-name {
+            font-size: 19px;
+
+            font-weight: 800;
+
+            letter-spacing: 0.3px;
+        }
+
+
+        .brand-subtitle {
+            font-size: 11px;
+
+            color: #7a8496;
+
+            margin-top: 3px;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        /* =====================================================
+           NAVIGATION
+        ===================================================== */
+
+        .nav-links {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+        }
+
+
+        .nav-links a {
+            text-decoration: none;
+
+            color: #4c5870;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            padding: 10px 15px;
+
+            border-radius: 8px;
+
+            transition: 0.25s ease;
+        }
+
+
+        .nav-links a:hover {
+            background: #eef3ff;
+
+            color: #245bd1;
+        }
+
+
+        .nav-links .home-link {
+            color: #245bd1;
+
+            background: #eef3ff;
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        main {
+            flex: 1;
+
+            width: 100%;
+
+            max-width: 1250px;
+
+            margin: auto;
+
+            padding: 55px 30px 70px;
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+            text-align: center;
+
+            max-width: 850px;
+
+            margin: 0 auto 45px;
+        }
+
+
+        .hero-badge {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            background: #e9f0ff;
+
+            color: #245bd1;
+
+            padding: 8px 15px;
+
+            border-radius: 30px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.8px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .hero-badge span {
+            width: 7px;
+
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #2e6de6;
+        }
+
+
+        .hero h1 {
+            font-size: 42px;
+
+            line-height: 1.15;
+
+            color: #183b87;
+
+            margin-bottom: 16px;
+
+            font-weight: 800;
+        }
+
+
+        .hero h1 span {
+            color: #2865df;
+        }
+
+
+        .hero p {
+            max-width: 680px;
+
+            margin: auto;
+
+            color: #68748a;
+
+            font-size: 16px;
+
+            line-height: 1.7;
+        }
+
+
+        /* =====================================================
+           LOGIN AREA
+        ===================================================== */
+
+        .login-section {
+            max-width: 1050px;
+
+            margin: auto;
+        }
+
+
+        .login-heading {
+            text-align: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .login-heading h2 {
+            font-size: 23px;
+
+            color: #1d315c;
+
+            margin-bottom: 7px;
+        }
+
+
+        .login-heading p {
+            color: #7b8598;
+
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           LOGIN CARDS
+        ===================================================== */
+
+        .login-cards {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 22px;
+        }
+
+
+        .login-card {
+            background: #ffffff;
+
+            border: 1px solid #e4e9f2;
+
+            border-radius: 16px;
+
+            padding: 30px 25px;
+
+            text-align: center;
+
+            box-shadow:
+                0 8px 30px rgba(25, 55, 110, 0.07);
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .login-card::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+
+            left: 0;
+
+            right: 0;
+
+            height: 4px;
+
+            background: #2865df;
+        }
+
+
+        .login-card:hover {
+            transform: translateY(-7px);
+
+            border-color: #cbd8f4;
+
+            box-shadow:
+                0 15px 40px rgba(25, 55, 110, 0.13);
+        }
+
+
+        /* =====================================================
+           ICON
+        ===================================================== */
+
+        .login-icon {
+            width: 68px;
+
+            height: 68px;
+
+            margin: 0 auto 20px;
+
+            border-radius: 18px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 29px;
+
+            background: #edf3ff;
+
+            color: #2865df;
+        }
+
+
+        .login-card h3 {
+            font-size: 20px;
+
+            color: #1d315c;
+
+            margin-bottom: 10px;
+        }
+
+
+        .login-card p {
+            color: #7b8598;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+            min-height: 42px;
+
+            margin-bottom: 22px;
+        }
+
+
+        /* =====================================================
+           BUTTON
+        ===================================================== */
+
+        .login-btn {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            width: 100%;
+
+            padding: 13px 18px;
+
+            border-radius: 9px;
+
+            background: #2865df;
+
+            color: #ffffff;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            transition: 0.25s ease;
+
+            box-shadow:
+                0 5px 14px rgba(40, 101, 223, 0.20);
+        }
+
+
+        .login-btn:hover {
+            background: #1e50bd;
+
+            box-shadow:
+                0 7px 18px rgba(40, 101, 223, 0.30);
+        }
+
+
+        .login-btn .arrow {
+            margin-left: 8px;
+
+            transition: 0.2s ease;
+        }
+
+
+        .login-btn:hover .arrow {
+            transform: translateX(4px);
+        }
+
+
+        /* =====================================================
+           INFORMATION STRIP
+        ===================================================== */
+
+        .info-strip {
+            max-width: 1050px;
+
+            margin: 35px auto 0;
+
+            background: #ffffff;
+
+            border: 1px solid #e4e9f2;
+
+            border-radius: 12px;
+
+            padding: 17px 22px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            color: #68748a;
+
+            font-size: 13px;
+
+            box-shadow:
+                0 5px 20px rgba(25, 55, 110, 0.04);
+        }
+
+
+        .info-strip strong {
+            color: #2a3d63;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        footer {
+            background: #183b87;
+
+            color: #ffffff;
+
+            padding: 22px 30px;
+        }
+
+
+        .footer-content {
+            max-width: 1250px;
+
+            margin: auto;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+
+        .footer-brand {
+            font-weight: 700;
+
+            font-size: 13px;
+        }
+
+
+        .footer-text {
+            font-size: 12px;
+
+            color: #cbd7f2;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 850px) {
+
+            .navbar {
+                padding: 14px 20px;
+            }
+
+
+            .brand-name {
+                font-size: 16px;
+            }
+
+
+            .brand-subtitle {
+                display: none;
+            }
+
+
+            .nav-links {
+                gap: 2px;
+            }
+
+
+            .nav-links a {
+                padding: 8px 9px;
+
+                font-size: 12px;
+            }
+
+
+            main {
+                padding:
+                    40px 20px
+                    55px;
+            }
+
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+
+            .login-cards {
+                grid-template-columns: 1fr;
+
+                max-width: 480px;
+
+                margin: auto;
+            }
+
+
+            .login-card {
+                padding: 25px;
+            }
+        }
+
+
+        @media (max-width: 550px) {
+
+            .navbar {
+                flex-direction: column;
+
+                gap: 12px;
+            }
+
+
+            .brand {
+                width: 100%;
+
+                justify-content: center;
+            }
+
+
+            .nav-links {
+                width: 100%;
+
+                justify-content: center;
+            }
+
+
+            .hero {
+                margin-bottom: 35px;
+            }
+
+
+            .hero h1 {
+                font-size: 27px;
+            }
+
+
+            .hero p {
+                font-size: 14px;
+            }
+
+
+            .login-heading h2 {
+                font-size: 20px;
+            }
+
+
+            .info-strip {
+                text-align: center;
+
+                line-height: 1.6;
+            }
+
+
+            .footer-content {
+                flex-direction: column;
+
+                text-align: center;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+    <div class="navbar">
+
+
+        <!-- BRAND -->
+
+        <a href="index.html" class="brand">
+
+            <img
+                src="IMAGES/LOGO1.png"
+                alt="NTISHOR WEB ENTERPRISE Logo"
+            >
+
+            <div class="brand-text">
+
+                <div class="brand-name">
+                    NTISHOR WEB ENTERPRISE
+                </div>
+
+                <div class="brand-subtitle">
+                    Personnel Management Solutions
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="nav-links">
+
+            <a
+                href="index.html#About"
+                class="home-link"
+            >
+                Home
+            </a>
+
+            <a href="index2.html#About">
+                About Us
+            </a>
+
+            <a href="index2.html#Service">
+                Services
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<main>
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="hero-badge">
+
+            <span></span>
+
+            Secure Personnel Portal
+
+        </div>
+
+
+        <h1>
+
+            Staff Attendance &
+
+            <span>Timesheet Management</span>
+
+            System
+
+        </h1>
+
+
+        <p>
+
+            Welcome to the NTISHOR WEB ENTERPRISE Personnel
+            Timesheet Management System. Select your account
+            type below to securely access your portal.
+
+        </p>
+
+    </section>
+
+
+
+    <!-- LOGIN SECTION -->
+
+    <section class="login-section">
+
+
+        <div class="login-heading">
+
+            <h2>
+                Select Your Login Portal
+            </h2>
+
+            <p>
+                Choose the account type that applies to you.
+            </p>
+
+        </div>
+
+
+
+        <!-- LOGIN CARDS -->
+
+        <div class="login-cards">
+
+
+            <!-- STAFF -->
+
+            <div class="login-card">
+
+                <div class="login-icon">
+                    👤
+                </div>
+
+                <h3>
+                    Staff Portal
+                </h3>
+
+                <p>
+                    Access attendance, clock-in/out,
+                    timesheets and assigned tasks.
+                </p>
+
+                <a
+                    href="staff_login.php"
+                    class="login-btn"
+                >
+                    Staff Login
+
+                    <span class="arrow">
+                        →
+                    </span>
+
+                </a>
+
+            </div>
+
+
+
+            <!-- SUPERVISOR -->
+
+            <div class="login-card">
+
+                <div class="login-icon">
+                    👥
+                </div>
+
+                <h3>
+                    Supervisor Portal
+                </h3>
+
+                <p>
+                    Manage staff attendance, review
+                    timesheets and monitor team activities.
+                </p>
+
+                <a
+                    href="supervisor_login.php"
+                    class="login-btn"
+                >
+                    Supervisor Login
+
+                    <span class="arrow">
+                        →
+                    </span>
+
+                </a>
+
+            </div>
+
+
+
+            <!-- ADMIN -->
+
+            <div class="login-card">
+
+                <div class="login-icon">
+                    🛡️
+                </div>
+
+                <h3>
+                    Admin Portal
+                </h3>
+
+                <p>
+                    Manage personnel, reports, system
+                    settings and overall administration.
+                </p>
+
+                <a
+                    href="admin_login.php"
+                    class="login-btn"
+                >
+                    Admin Login
+
+                    <span class="arrow">
+                        →
+                    </span>
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- INFORMATION -->
+
+        <div class="info-strip">
+
+            🔒
+
+            <strong>
+                Authorized Personnel Only
+            </strong>
+
+            <span>
+                — Access is restricted to registered
+                NTISHOR WEB ENTERPRISE users.
+            </span>
+
+        </div>
+
+
+    </section>
+
+</main>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+
+            © 2026 NTISHOR WEB ENTERPRISE
+
+        </div>
+
+        <div class="footer-text">
+
+            Personnel Timesheet Management System
+            &nbsp;|&nbsp;
+            Internal Use Only
+
+        </div>
+
+    </div>
+
+</footer>
+
+</body>
+</html>

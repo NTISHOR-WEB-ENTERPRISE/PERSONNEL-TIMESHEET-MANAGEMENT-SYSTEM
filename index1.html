@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NTISHOR WEB ENTERPRISE — Personnel Timesheet System</title>
+<link rel="stylesheet" href="styles1.css">
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-mark">TT</div>
+      <div>
+        <div class="auth-logo-text">TimeTrack</div>
+        <div class="auth-logo-sub">Personnel Timesheet System</div>
+      </div>
+    </div>
+    <h2 class="auth-title">Sign in to your account</h2>
+    <p class="auth-sub">Sign in as Employee or Manager/Admin</p>
+    <div class="role-pills">
+      <div class="role-pill active" onclick="selectRole('employee', this)">👤 Employee</div>
+      <div class="role-pill" onclick="selectRole('manager', this)">🏢 Manager</div>
+      <div class="role-pill" onclick="selectRole('admin', this)">⚙️ Admin</div>
+    </div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input class="form-control" type="email" id="auth-email" placeholder="you@company.com" value="john.doe@company.com">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input class="form-control" type="password" id="auth-pass" placeholder="••••••••" value="••••••••">
+    </div>
+    <button class="btn btn-primary btn-full" onclick="doLogin()" style="margin-top:4px;">Sign In</button>
+    <p style="font-size:11px;color:var(--ink-faint);text-align:center;margin-top:16px;">Demo: click any role and press Sign In</p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-mark">TT</div>
+      <div>
+        <div class="sidebar-brand-name">TimeTrack</div>
+        <div class="sidebar-brand-tagline">Timesheet System</div>
+      </div>
+    </div>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" id="sb-avatar">JD</div>
+      <div>
+        <div class="sidebar-user-name" id="sb-name">John Doe</div>
+        <div class="sidebar-user-role" id="sb-role">Employee</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav"></nav>
+    <div class="sidebar-footer">
+      <div class="btn-logout" onclick="doLogout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Sign out
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <div class="topbar-title" id="topbar-title">Dashboard</div>
+        <div class="topbar-breadcrumb" id="topbar-breadcrumb">TimeTrack / Dashboard</div>
+      </div>
+      <div class="topbar-right">
+        <div class="clock-badge" id="topbar-clock-badge">
+          <div class="clock-dot"></div>
+          <span id="topbar-clock">08:32:14</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="content">
+      <!-- DASHBOARD VIEW -->
+      <div class="view active" id="view-dashboard">
+        <div class="stats-grid" id="dash-stats"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;" id="dash-lower"></div>
+      </div>
+
+      <!-- CLOCK VIEW -->
+      <div class="view" id="view-clock">
+        <div class="clock-panel">
+          <div class="clock-status out" id="clock-status-badge">
+            <span id="clock-status-dot">●</span> <span id="clock-status-text">Clocked Out</span>
+          </div>
+          <div class="live-clock" id="clock-time">--:--:--</div>
+          <div class="live-date" id="clock-date">--</div>
+          <div class="clock-actions">
+            <button class="btn-clock-in" id="btn-ci" onclick="clockIn()">Clock In</button>
+            <button class="btn-clock-out" id="btn-co" onclick="clockOut()" disabled>Clock Out</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Today's Time Log</span>
+            <span class="badge badge-blue" id="today-total-badge">0h 0m today</span>
+          </div>
+          <div class="table-wrap">
+            <table id="clock-log-table">
+              <thead><tr><th>#</th><th>Date</th><th>Clock In</th><th>Clock Out</th><th>Duration</th><th>Status</th></tr></thead>
+              <tbody id="clock-log-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIMESHEET VIEW -->
+      <div class="view" id="view-timesheet">
+        <div class="week-nav">
+          <button class="week-nav-btn" onclick="changeWeek(-1)">&#8592;</button>
+          <span class="week-label" id="week-label">Week of ...</span>
+          <button class="week-nav-btn" onclick="changeWeek(1)">&#8594;</button>
+          <button class="btn btn-outline btn-sm" onclick="goToCurrentWeek()">This Week</button>
+          <div style="margin-left:auto;display:flex;gap:8px;">
+            <button class="btn btn-outline btn-sm" onclick="saveTimesheet()">Save Draft</button>
+            <button class="btn btn-primary btn-sm" onclick="submitTimesheet()">Submit for Approval</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Weekly Timesheet</span>
+            <span class="badge badge-blue" id="ts-total-label">Total: 0h</span>
+          </div>
+          <div class="card-body" style="padding:0;overflow-x:auto;">
+            <div id="timesheet-grid" style="min-width:700px;"></div>
+          </div>
+          <div style="padding:16px 20px;border-top:1px solid var(--rule);">
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Notes / Comments</label>
+              <textarea class="form-control" id="ts-notes" placeholder="Add any notes about this week's work..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- APPROVALS VIEW -->
+      <div class="view" id="view-approvals">
+        <div class="tabs">
+          <div class="tab active" onclick="switchApprovalTab('pending', this)">Pending <span class="badge badge-amber" id="pending-count" style="margin-left:4px;">0</span></div>
+          <div class="tab" onclick="switchApprovalTab('approved', this)">Approved</div>
+          <div class="tab" onclick="switchApprovalTab('rejected', this)">Rejected</div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title" id="approval-list-title">Pending Approvals</span>
+          </div>
+          <div id="approval-list"></div>
+        </div>
+      </div>
+
+      <!-- REPORTS VIEW -->
+      <div class="view" id="view-reports">
+        <div class="report-grid" style="margin-bottom:24px;">
+          <div class="report-card" onclick="generateReport('hours')">
+            <div class="report-icon" style="background:var(--accent-light);">📊</div>
+            <div class="report-name">Hours Summary</div>
+            <div class="report-desc">Total hours by employee for any date range</div>
+          </div>
+          <div class="report-card" onclick="generateReport('attendance')">
+            <div class="report-icon" style="background:var(--green-light);">✅</div>
+            <div class="report-name">Attendance Report</div>
+            <div class="report-desc">Daily attendance and punctuality tracking</div>
+          </div>
+          <div class="report-card" onclick="generateReport('overtime')">
+            <div class="report-icon" style="background:var(--amber-light);">⏱️</div>
+            <div class="report-name">Overtime Report</div>
+            <div class="report-desc">Identify employees with overtime hours</div>
+          </div>
+          <div class="report-card" onclick="generateReport('department')">
+            <div class="report-icon" style="background:var(--purple-light);">🏢</div>
+            <div class="report-name">Department Summary</div>
+            <div class="report-desc">Hours breakdown by department</div>
+          </div>
+        </div>
+
+        <div class="card" id="report-output" style="display:none;">
+          <div class="card-header">
+            <span class="card-title" id="report-title">Report</span>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-outline btn-sm" onclick="exportCSV()">Export CSV</button>
+              <button class="btn btn-outline btn-sm" onclick="printReport()">Print</button>
+            </div>
+          </div>
+          <div class="card-body" id="report-body"></div>
+        </div>
+      </div>
+
+      <!-- ADMIN VIEW -->
+      <div class="view" id="view-admin">
+        <div class="tabs">
+          <div class="tab active" onclick="switchAdminTab('personnel', this)">Personnel</div>
+          <div class="tab" onclick="switchAdminTab('settings', this)">Settings</div>
+        </div>
+        <div id="admin-personnel-view">
+          <div class="card" style="margin-bottom:20px;">
+            <div class="card-header">
+              <span class="card-title">All Personnel</span>
+              <button class="btn btn-primary btn-sm" onclick="openAddEmployee()">+ Add Employee</button>
+            </div>
+            <div id="personnel-list"></div>
+          </div>
+        </div>
+        <div id="admin-settings-view" style="display:none;">
+          <div class="card">
+            <div class="card-header"><span class="card-title">System Settings</span></div>
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Company Name</label>
+                  <input class="form-control" value="Acme Corporation">
+                </div>
+                <div class="form-group">
+                  <label>Work Week Start</label>
+                  <select class="form-control">
+                    <option>Monday</option><option>Sunday</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Standard Hours / Day</label>
+                  <input class="form-control" type="number" value="8">
+                </div>
+                <div class="form-group">
+                  <label>Overtime Threshold (hrs/week)</label>
+                  <input class="form-control" type="number" value="40">
+                </div>
+              </div>
+              <button class="btn btn-primary" onclick="toast('Settings saved', 'success')">Save Settings</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MY TIMESHEETS (employee) -->
+      <div class="view" id="view-my-timesheets">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">My Submitted Timesheets</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Week</th><th>Total Hours</th><th>Submitted</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody id="my-ts-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-reject">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Reject Timesheet</div>
+      <span class="modal-close" onclick="closeModal('modal-reject')">✕</span>
+    </div>
+    <div class="form-group">
+      <label>Reason for Rejection</label>
+      <textarea class="form-control" id="reject-reason" placeholder="Explain why this timesheet is being rejected..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-reject')">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmReject()">Reject Timesheet</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-add-employee">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add New Employee</div>
+      <span class="modal-close" onclick="closeModal('modal-add-employee')">✕</span>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>First Name</label>
+        <input class="form-control" id="emp-fname" placeholder="First name">
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input class="form-control" id="emp-lname" placeholder="Last name">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Email</label>
+        <input class="form-control" id="emp-email" type="email" placeholder="email@company.com">
+      </div>
+      <div class="form-group">
+        <label>Role</label>
+        <select class="form-control" id="emp-role">
+          <option>Employee</option><option>Manager</option><option>Admin</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Department</label>
+        <select class="form-control" id="emp-dept">
+          <option>Engineering</option><option>Marketing</option><option>Finance</option><option>HR</option><option>Operations</option><option>Sales</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Start Date</label>
+        <input class="form-control" id="emp-start" type="date">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-add-employee')">Cancel</button>
+      <button class="btn btn-primary" onclick="addEmployee()">Add Employee</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="script.js"></script>
+</html>
